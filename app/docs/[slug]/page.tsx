@@ -8,13 +8,15 @@ import { getDocFromParams } from "@/lib/docs";
 import Breadcrumb from "@/components/Breadcrumb";
 
 interface PageProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
   searchParams: { [key: string]: string | string[] | undefined };
 }
 
 export async function generateMetadata({
   params,
-}: PageProps): Promise<Metadata> {
+}: {
+  params: { slug: string };
+}): Promise<Metadata> {
   try {
     const filePath = path.join(process.cwd(), "content", `${params.slug}.mdx`);
     const source = await fs.readFile(filePath, "utf-8");
@@ -42,11 +44,12 @@ export async function generateStaticParams() {
 }
 
 export default async function Page({ params, searchParams }: PageProps) {
+  const resolvedParams = await params;
   const query = Array.isArray(searchParams.query)
     ? searchParams.query[0]
     : searchParams.query || "";
 
-  const doc = await getDocFromParams(params.slug);
+  const doc = await getDocFromParams(resolvedParams.slug);
 
   if (!doc) {
     notFound();
