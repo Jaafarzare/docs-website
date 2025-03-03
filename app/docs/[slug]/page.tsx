@@ -9,7 +9,7 @@ import Breadcrumb from "@/components/Breadcrumb";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 export async function generateMetadata({
@@ -45,9 +45,10 @@ export async function generateStaticParams() {
 
 export default async function Page({ params, searchParams }: PageProps) {
   const resolvedParams = await params;
-  const query = Array.isArray(searchParams.query)
-    ? searchParams.query[0]
-    : searchParams.query || "";
+  const resolvedSearchParams = await searchParams;
+  const query = Array.isArray(resolvedSearchParams.query)
+    ? resolvedSearchParams.query[0]
+    : resolvedSearchParams.query || "";
 
   const doc = await getDocFromParams(resolvedParams.slug);
 
