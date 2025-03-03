@@ -3,13 +3,7 @@ import path from "path";
 import matter from "gray-matter";
 import { remark } from "remark";
 import html from "remark-html";
-
-export interface DocFile {
-  slug: string;
-  title: string;
-  description?: string;
-  body: string;
-}
+import type { DocFile } from "@/types/docs";
 
 export async function getDocFromParams(slug: string): Promise<DocFile | null> {
   try {
