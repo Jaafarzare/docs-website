@@ -1,10 +1,18 @@
-interface Props {
+import { DetailedHTMLProps, HTMLAttributes } from "react";
+
+interface PreProps
+  extends DetailedHTMLProps<HTMLAttributes<HTMLPreElement>, HTMLPreElement> {
   children: React.ReactNode;
   className?: string;
-  [key: string]: any;
 }
 
-export function Pre({ children, className = "", ...props }: Props) {
+interface CodeProps
+  extends DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> {
+  children: React.ReactNode;
+  className?: string;
+}
+
+export function Pre({ children, className = "", ...props }: PreProps) {
   return (
     <pre
       className={`bg-gray-900 text-white p-4 rounded-lg overflow-x-auto ${className}`}
@@ -15,7 +23,7 @@ export function Pre({ children, className = "", ...props }: Props) {
   );
 }
 
-export function Code({ children, className = "", ...props }: Props) {
+export function Code({ children, className = "", ...props }: CodeProps) {
   return (
     <code
       className={`bg-gray-100 dark:bg-gray-800 rounded px-1 ${className}`}
