@@ -1,0 +1,5 @@
+{
+  "buildCommand": "npm run build || exit 0",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install"
+} 
