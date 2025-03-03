@@ -3,18 +3,20 @@ import Link from "next/link";
 import Breadcrumb from "@/components/Breadcrumb";
 
 interface CustomPageProps {
-  searchParams: Record<string, string | string[] | undefined>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }
 
 export default async function Page({ searchParams }: CustomPageProps) {
-  const query = Array.isArray(searchParams?.query)
-    ? searchParams.query[0]
-    : searchParams?.query || "";
+  const resolvedSearchParams = await searchParams;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const query = Array.isArray(resolvedSearchParams?.query)
+    ? resolvedSearchParams.query[0]
+    : resolvedSearchParams?.query || "";
 
   return (
     <>
       <div className="w-full md:w-64 md:flex-none md:overflow-y-auto">
-        <Sidebar searchParams={Promise.resolve({ query })} />
+        <Sidebar searchParams={searchParams} />
       </div>
       <div className="flex-1 p-4 md:p-8 md:overflow-y-auto">
         <div className="max-w-3xl mx-auto space-y-6 md:space-y-8">

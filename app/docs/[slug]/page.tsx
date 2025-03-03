@@ -9,13 +9,15 @@ import Breadcrumb from "@/components/Breadcrumb";
 
 interface CustomPageProps {
   params: { slug: string };
-  searchParams: Record<string, string | string[] | undefined>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }
 
 export default async function Page({ params, searchParams }: CustomPageProps) {
-  const query = Array.isArray(searchParams?.query)
-    ? searchParams.query[0]
-    : searchParams?.query || "";
+  const resolvedSearchParams = await searchParams;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const query = Array.isArray(resolvedSearchParams?.query)
+    ? resolvedSearchParams.query[0]
+    : resolvedSearchParams?.query || "";
 
   const doc = await getDocFromParams(params.slug);
 
@@ -26,7 +28,7 @@ export default async function Page({ params, searchParams }: CustomPageProps) {
   return (
     <>
       <div className="w-full md:w-64 md:flex-none md:overflow-y-auto">
-        <Sidebar searchParams={Promise.resolve({ query })} />
+        <Sidebar searchParams={searchParams} />
       </div>
       <div className="flex-1 p-4 md:p-8 md:overflow-y-auto">
         <article className="prose max-w-3xl mx-auto rtl bg-white dark:bg-zinc-800 p-6 md:p-8 rounded-lg shadow-[0_2px_4px_0_rgb(0,0,0,0.08)] dark:shadow-[0_2px_4px_0_rgb(0,0,0,0.4)]">
