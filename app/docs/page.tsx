@@ -2,19 +2,14 @@ import Sidebar from "@/components/Sidebar";
 import Link from "next/link";
 import Breadcrumb from "@/components/Breadcrumb";
 
-interface PageProps {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}
+type PageProps = {
+  searchParams: { [key: string]: string | string[] | undefined };
+};
 
 export default async function Page({ searchParams }: PageProps) {
-  const params = await searchParams;
-  console.log("Page searchParams:", params);
-
-  const query = Array.isArray(params.query)
-    ? params.query[0]
-    : params.query || "";
-
-  console.log("Query value:", query);
+  const query = Array.isArray(searchParams.query)
+    ? searchParams.query[0]
+    : searchParams.query || "";
 
   return (
     <>

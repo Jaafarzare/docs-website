@@ -7,12 +7,12 @@ import Sidebar from "@/components/Sidebar";
 import { getDocFromParams } from "@/lib/docs";
 import Breadcrumb from "@/components/Breadcrumb";
 
-interface PageProps {
+type PageProps = {
   params: {
     slug: string;
   };
   searchParams: { [key: string]: string | string[] | undefined };
-}
+};
 
 export async function generateMetadata({
   params,
@@ -28,8 +28,7 @@ export async function generateMetadata({
       title: data.title || params.slug,
       description: data.description || `مستندات مربوط به ${params.slug}`,
     };
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  } catch (error) {
+  } catch {
     return {
       title: "صفحه یافت نشد",
       description: "متاسفانه صفحه مورد نظر یافت نشد.",
