@@ -7,20 +7,17 @@ import Sidebar from "@/components/Sidebar";
 import { getDocFromParams } from "@/lib/docs";
 import Breadcrumb from "@/components/Breadcrumb";
 
-type PageProps = {
-  params: Promise<{ slug: string }>;
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-};
+interface SearchParams {
+  [key: string]: string | string[] | undefined;
+}
+
+interface PageProps {
+  params: { slug: string };
+  searchParams: SearchParams;
+}
 
 export default async function Page({ params, searchParams }: PageProps) {
-  const resolvedParams = await params;
-  const resolvedSearchParams = await searchParams;
-
-  const query = Array.isArray(resolvedSearchParams?.query)
-    ? resolvedSearchParams.query[0]
-    : resolvedSearchParams?.query || "";
-
-  const doc = await getDocFromParams(resolvedParams.slug);
+  const doc = await getDocFromParams(params.slug);
 
   if (!doc) {
     notFound();
@@ -29,7 +26,7 @@ export default async function Page({ params, searchParams }: PageProps) {
   return (
     <>
       <div className="w-full md:w-64 md:flex-none md:overflow-y-auto">
-        <Sidebar searchParams={searchParams} />
+        <Sidebar searchParams={Promise.resolve(searchParams)} />
       </div>
       <div className="flex-1 p-4 md:p-8 md:overflow-y-auto">
         <article className="prose max-w-3xl mx-auto rtl bg-white dark:bg-zinc-800 p-6 md:p-8 rounded-lg shadow-[0_2px_4px_0_rgb(0,0,0,0.08)] dark:shadow-[0_2px_4px_0_rgb(0,0,0,0.4)]">
@@ -50,22 +47,16 @@ export default async function Page({ params, searchParams }: PageProps) {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: { slug: string };
 }): Promise<Metadata> {
-  const resolvedParams = await params;
   try {
-    const filePath = path.join(
-      process.cwd(),
-      "content",
-      `${resolvedParams.slug}.mdx`
-    );
+    const filePath = path.join(process.cwd(), "content", `${params.slug}.mdx`);
     const source = await fs.readFile(filePath, "utf-8");
     const { data } = matter(source);
 
     return {
-      title: data.title || resolvedParams.slug,
-      description:
-        data.description || `مستندات مربوط به ${resolvedParams.slug}`,
+      title: data.title || params.slug,
+      description: data.description || `مستندات مربوط به ${params.slug}`,
     };
   } catch {
     return {

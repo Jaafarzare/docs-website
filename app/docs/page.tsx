@@ -2,15 +2,19 @@ import Sidebar from "@/components/Sidebar";
 import Link from "next/link";
 import Breadcrumb from "@/components/Breadcrumb";
 
-type PageProps = {
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-};
+interface SearchParams {
+  [key: string]: string | string[] | undefined;
+}
+
+interface PageProps {
+  searchParams: SearchParams;
+}
 
 export default async function Page({ searchParams }: PageProps) {
   return (
     <>
       <div className="w-full md:w-64 md:flex-none md:overflow-y-auto">
-        <Sidebar searchParams={searchParams} />
+        <Sidebar searchParams={Promise.resolve(searchParams)} />
       </div>
       <div className="flex-1 p-4 md:p-8 md:overflow-y-auto">
         <div className="max-w-3xl mx-auto space-y-6 md:space-y-8">
