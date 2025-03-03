@@ -7,16 +7,18 @@ import Sidebar from "@/components/Sidebar";
 import { getDocFromParams } from "@/lib/docs";
 import Breadcrumb from "@/components/Breadcrumb";
 
-interface SearchParams {
-  [key: string]: string | string[] | undefined;
-}
-
-interface PageProps {
+interface CustomPageProps {
   params: { slug: string };
-  searchParams: SearchParams;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }
 
-export default async function Page({ params, searchParams }: PageProps) {
+export default async function Page({ params, searchParams }: CustomPageProps) {
+  const resolvedSearchParams = await searchParams;
+
+  const query = Array.isArray(resolvedSearchParams?.query)
+    ? resolvedSearchParams.query[0]
+    : resolvedSearchParams?.query || "";
+
   const doc = await getDocFromParams(params.slug);
 
   if (!doc) {
@@ -26,7 +28,7 @@ export default async function Page({ params, searchParams }: PageProps) {
   return (
     <>
       <div className="w-full md:w-64 md:flex-none md:overflow-y-auto">
-        <Sidebar searchParams={Promise.resolve(searchParams)} />
+        <Sidebar searchParams={resolvedSearchParams} />
       </div>
       <div className="flex-1 p-4 md:p-8 md:overflow-y-auto">
         <article className="prose max-w-3xl mx-auto rtl bg-white dark:bg-zinc-800 p-6 md:p-8 rounded-lg shadow-[0_2px_4px_0_rgb(0,0,0,0.08)] dark:shadow-[0_2px_4px_0_rgb(0,0,0,0.4)]">
