@@ -1,84 +1,82 @@
+import { Metadata } from "next";
 import Sidebar from "@/components/Sidebar";
-import Link from "next/link";
 import Breadcrumb from "@/components/Breadcrumb";
+import Link from "next/link";
 
-interface CustomPageProps {
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
+interface PageProps {
+  searchParams: Promise<{ query?: string }>;
 }
 
-export default async function Page({ searchParams }: CustomPageProps) {
-  const resolvedSearchParams = await searchParams;
-  const query = Array.isArray(resolvedSearchParams?.query)
-    ? resolvedSearchParams.query[0]
-    : resolvedSearchParams?.query || "";
-
+export default async function Page({ searchParams }: PageProps) {
   return (
     <>
       <div className="w-full md:w-64 md:flex-none md:overflow-y-auto">
         <Sidebar searchParams={searchParams} />
       </div>
       <div className="flex-1 p-4 md:p-8 md:overflow-y-auto">
-        <div className="max-w-3xl mx-auto space-y-6 md:space-y-8">
+        <article className="prose max-w-3xl mx-auto rtl bg-white dark:bg-zinc-800 p-6 md:p-8 rounded-lg shadow-[0_2px_4px_0_rgb(0,0,0,0.08)] dark:shadow-[0_2px_4px_0_rgb(0,0,0,0.4)]">
           <Breadcrumb />
-          <h1 className="text-2xl md:text-3xl font-bold text-zinc-800 dark:text-zinc-100">
-            به مستندات خوش آمدید
+          <h1 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 text-zinc-800 dark:text-zinc-50">
+            مستندات
           </h1>
-          <div className="prose max-w-none space-y-6 md:space-y-8">
-            <p className="text-base md:text-lg text-zinc-600 dark:text-zinc-300">
-              در این بخش می‌توانید تمام مستندات و راهنماهای مورد نیاز را پیدا
-              کنید. از منوی سمت راست می‌توانید به بخش‌های مختلف دسترسی داشته
-              باشید.
-            </p>
-            <div className="bg-white dark:bg-zinc-800 p-4 md:p-6 rounded-lg shadow-[0_2px_4px_0_rgb(0,0,0,0.08)] dark:shadow-[0_2px_4px_0_rgb(0,0,0,0.4)]">
-              <h2 className="text-lg md:text-xl font-semibold mb-3 md:mb-4 text-zinc-800 dark:text-zinc-100">
-                شروع سریع
-              </h2>
-              <ul className="space-y-2 md:space-y-3 text-zinc-600 dark:text-zinc-300">
-                <li className="flex items-center">
-                  <span className="text-emerald-600 dark:text-emerald-500 mr-2">
-                    •
-                  </span>
-                  برای جستجو در مستندات از باکس جستجو استفاده کنید
-                </li>
-                <li className="flex items-center">
-                  <span className="text-emerald-600 dark:text-emerald-500 mr-2">
-                    •
-                  </span>
-                  مستندات به صورت دسته‌بندی شده در منوی کناری قرار دارند
-                </li>
-                <li className="flex items-center">
-                  <span className="text-emerald-600 dark:text-emerald-500 mr-2">
-                    •
-                  </span>
-                  برای دسترسی سریع‌تر می‌توانید از بخش جستجو استفاده کنید
-                </li>
-              </ul>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-              <Link href="/docs/api-reference" className="block group">
-                <div className="bg-white dark:bg-zinc-800 p-4 md:p-6 rounded-lg shadow-[0_2px_4px_0_rgb(0,0,0,0.08)] dark:shadow-[0_2px_4px_0_rgb(0,0,0,0.4)] transition-all duration-200 hover:shadow-[0_8px_16px_0_rgb(0,0,0,0.08)] hover:bg-zinc-50 dark:hover:bg-zinc-700">
-                  <h3 className="text-lg font-semibold mb-2 md:mb-3 text-zinc-800 dark:text-zinc-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-500">
-                    مستندات API
-                  </h3>
-                  <p className="text-zinc-600 dark:text-zinc-300">
-                    مستندات کامل API و نحوه استفاده از آن
-                  </p>
-                </div>
-              </Link>
-              <Link href="/docs/getting-started" className="block group">
-                <div className="bg-white dark:bg-zinc-800 p-4 md:p-6 rounded-lg shadow-[0_2px_4px_0_rgb(0,0,0,0.08)] dark:shadow-[0_2px_4px_0_rgb(0,0,0,0.4)] transition-all duration-200 hover:shadow-[0_8px_16px_0_rgb(0,0,0,0.08)] hover:bg-zinc-50 dark:hover:bg-zinc-700">
-                  <h3 className="text-lg font-semibold mb-2 md:mb-3 text-zinc-800 dark:text-zinc-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-500">
-                    راهنمای شروع
-                  </h3>
-                  <p className="text-zinc-600 dark:text-zinc-300">
-                    آموزش گام به گام برای شروع کار
-                  </p>
-                </div>
-              </Link>
-            </div>
+          <p className="text-zinc-700 dark:text-zinc-200 mb-8">
+            به مستندات خوش آمدید. از منوی سمت راست می‌توانید موضوع مورد نظر خود
+            را انتخاب کنید.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 not-prose">
+            <Link href="/docs/getting-started" className="block group">
+              <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg border border-zinc-200 dark:border-zinc-700 transition-all duration-200 hover:border-emerald-500 dark:hover:border-emerald-500 hover:shadow-lg">
+                <h3 className="text-lg font-semibold mb-3 text-zinc-800 dark:text-zinc-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-500">
+                  شروع کار
+                </h3>
+                <p className="text-zinc-600 dark:text-zinc-300">
+                  راهنمای گام به گام برای شروع کار با پروژه و نصب و راه‌اندازی
+                  آن
+                </p>
+              </div>
+            </Link>
+
+            <Link href="/docs/api-reference" className="block group">
+              <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg border border-zinc-200 dark:border-zinc-700 transition-all duration-200 hover:border-emerald-500 dark:hover:border-emerald-500 hover:shadow-lg">
+                <h3 className="text-lg font-semibold mb-3 text-zinc-800 dark:text-zinc-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-500">
+                  مستندات API
+                </h3>
+                <p className="text-zinc-600 dark:text-zinc-300">
+                  مستندات کامل API و نحوه استفاده از توابع و امکانات مختلف
+                </p>
+              </div>
+            </Link>
+
+            <Link href="/docs/components" className="block group">
+              <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg border border-zinc-200 dark:border-zinc-700 transition-all duration-200 hover:border-emerald-500 dark:hover:border-emerald-500 hover:shadow-lg">
+                <h3 className="text-lg font-semibold mb-3 text-zinc-800 dark:text-zinc-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-500">
+                  کامپوننت‌ها
+                </h3>
+                <p className="text-zinc-600 dark:text-zinc-300">
+                  راهنمای استفاده از کامپوننت‌های مختلف و نحوه شخصی‌سازی آنها
+                </p>
+              </div>
+            </Link>
+
+            <Link href="/docs/examples" className="block group">
+              <div className="bg-white dark:bg-zinc-900 p-6 rounded-lg border border-zinc-200 dark:border-zinc-700 transition-all duration-200 hover:border-emerald-500 dark:hover:border-emerald-500 hover:shadow-lg">
+                <h3 className="text-lg font-semibold mb-3 text-zinc-800 dark:text-zinc-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-500">
+                  مثال‌ها
+                </h3>
+                <p className="text-zinc-600 dark:text-zinc-300">
+                  نمونه‌های عملی و مثال‌های کاربردی برای یادگیری بهتر
+                </p>
+              </div>
+            </Link>
           </div>
-        </div>
+        </article>
       </div>
     </>
   );
 }
+
+export const metadata: Metadata = {
+  title: "مستندات",
+  description: "مستندات پروژه",
+};
