@@ -2,7 +2,9 @@ import Sidebar from "@/components/Sidebar";
 import Link from "next/link";
 import Breadcrumb from "@/components/Breadcrumb";
 
-type SearchParams = { [key: string]: string | string[] | undefined };
+interface SearchParams {
+  [key: string]: string | string[] | undefined;
+}
 
 interface PageProps {
   searchParams: SearchParams;

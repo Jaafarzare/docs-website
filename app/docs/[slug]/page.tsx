@@ -7,7 +7,9 @@ import Sidebar from "@/components/Sidebar";
 import { getDocFromParams } from "@/lib/docs";
 import Breadcrumb from "@/components/Breadcrumb";
 
-type SearchParams = { [key: string]: string | string[] | undefined };
+interface SearchParams {
+  [key: string]: string | string[] | undefined;
+}
 
 interface PageProps {
   params: { slug: string };
