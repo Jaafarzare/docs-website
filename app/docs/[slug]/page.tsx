@@ -8,8 +8,8 @@ import { getDocFromParams } from "@/lib/docs";
 import Breadcrumb from "@/components/Breadcrumb";
 
 interface PageProps {
-  params: Promise<{ slug: string }>;
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  params: any;
+  searchParams: any;
 }
 
 export async function generateMetadata({
@@ -44,13 +44,11 @@ export async function generateStaticParams() {
 }
 
 export default async function Page({ params, searchParams }: PageProps) {
-  const resolvedParams = await params;
-  const resolvedSearchParams = await searchParams;
-  const query = Array.isArray(resolvedSearchParams.query)
-    ? resolvedSearchParams.query[0]
-    : resolvedSearchParams.query || "";
+  const query = Array.isArray(searchParams?.query)
+    ? searchParams.query[0]
+    : searchParams?.query || "";
 
-  const doc = await getDocFromParams(resolvedParams.slug);
+  const doc = await getDocFromParams(params.slug);
 
   if (!doc) {
     notFound();

@@ -3,14 +3,13 @@ import Link from "next/link";
 import Breadcrumb from "@/components/Breadcrumb";
 
 interface PageProps {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  searchParams: any;
 }
 
 export default async function Page({ searchParams }: PageProps) {
-  const resolvedSearchParams = await searchParams;
-  const query = Array.isArray(resolvedSearchParams.query)
-    ? resolvedSearchParams.query[0]
-    : resolvedSearchParams.query || "";
+  const query = Array.isArray(searchParams?.query)
+    ? searchParams.query[0]
+    : searchParams?.query || "";
 
   return (
     <>
