@@ -2,17 +2,11 @@ import Sidebar from "@/components/Sidebar";
 import Link from "next/link";
 import Breadcrumb from "@/components/Breadcrumb";
 
-interface CustomPageProps {
+type PageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
-}
+};
 
-export default async function Page({ searchParams }: CustomPageProps) {
-  const resolvedSearchParams = await searchParams;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const query = Array.isArray(resolvedSearchParams?.query)
-    ? resolvedSearchParams.query[0]
-    : resolvedSearchParams?.query || "";
-
+export default async function Page({ searchParams }: PageProps) {
   return (
     <>
       <div className="w-full md:w-64 md:flex-none md:overflow-y-auto">

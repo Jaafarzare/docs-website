@@ -7,19 +7,20 @@ import Sidebar from "@/components/Sidebar";
 import { getDocFromParams } from "@/lib/docs";
 import Breadcrumb from "@/components/Breadcrumb";
 
-interface CustomPageProps {
-  params: { slug: string };
+type PageProps = {
+  params: Promise<{ slug: string }>;
   searchParams: Promise<Record<string, string | string[] | undefined>>;
-}
+};
 
-export default async function Page({ params, searchParams }: CustomPageProps) {
+export default async function Page({ params, searchParams }: PageProps) {
+  const resolvedParams = await params;
   const resolvedSearchParams = await searchParams;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   const query = Array.isArray(resolvedSearchParams?.query)
     ? resolvedSearchParams.query[0]
     : resolvedSearchParams?.query || "";
 
-  const doc = await getDocFromParams(params.slug);
+  const doc = await getDocFromParams(resolvedParams.slug);
 
   if (!doc) {
     notFound();
@@ -49,16 +50,22 @@ export default async function Page({ params, searchParams }: CustomPageProps) {
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
+  const resolvedParams = await params;
   try {
-    const filePath = path.join(process.cwd(), "content", `${params.slug}.mdx`);
+    const filePath = path.join(
+      process.cwd(),
+      "content",
+      `${resolvedParams.slug}.mdx`
+    );
     const source = await fs.readFile(filePath, "utf-8");
     const { data } = matter(source);
 
     return {
-      title: data.title || params.slug,
-      description: data.description || `مستندات مربوط به ${params.slug}`,
+      title: data.title || resolvedParams.slug,
+      description:
+        data.description || `مستندات مربوط به ${resolvedParams.slug}`,
     };
   } catch {
     return {
