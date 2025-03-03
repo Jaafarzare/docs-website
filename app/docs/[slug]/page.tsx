@@ -7,8 +7,12 @@ import Sidebar from "@/components/Sidebar";
 import { getDocFromParams } from "@/lib/docs";
 import Breadcrumb from "@/components/Breadcrumb";
 
-// @ts-ignore
-export default async function Page({ params, searchParams }) {
+interface CustomPageProps {
+  params: { slug: string };
+  searchParams: Record<string, string | string[] | undefined>;
+}
+
+export default async function Page({ params, searchParams }: CustomPageProps) {
   const query = Array.isArray(searchParams?.query)
     ? searchParams.query[0]
     : searchParams?.query || "";
