@@ -2,9 +2,9 @@ import Sidebar from "@/components/Sidebar";
 import Link from "next/link";
 import Breadcrumb from "@/components/Breadcrumb";
 
-type PageProps = {
+interface PageProps {
   searchParams: { [key: string]: string | string[] | undefined };
-};
+}
 
 export default async function Page({ searchParams }: PageProps) {
   const query = Array.isArray(searchParams.query)

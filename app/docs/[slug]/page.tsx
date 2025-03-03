@@ -7,18 +7,14 @@ import Sidebar from "@/components/Sidebar";
 import { getDocFromParams } from "@/lib/docs";
 import Breadcrumb from "@/components/Breadcrumb";
 
-type PageProps = {
-  params: {
-    slug: string;
-  };
+interface PageProps {
+  params: { slug: string };
   searchParams: { [key: string]: string | string[] | undefined };
-};
+}
 
 export async function generateMetadata({
   params,
-}: {
-  params: { slug: string };
-}): Promise<Metadata> {
+}: PageProps): Promise<Metadata> {
   try {
     const filePath = path.join(process.cwd(), "content", `${params.slug}.mdx`);
     const source = await fs.readFile(filePath, "utf-8");
